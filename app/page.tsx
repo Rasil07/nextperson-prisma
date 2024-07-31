@@ -17,6 +17,7 @@ import { Box } from "@mui/material";
 
 //import my custom Footer that will go at the bottom of the page
 import Footer from "./components/CFooter";
+import { env } from "process";
 
 const HomePage: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -29,6 +30,11 @@ const HomePage: React.FC = () => {
     "success"
   );
 
+  console.log(
+    "Env variables",
+    process.env.DATABASE_URL,
+    process.env.POSTGRES_URL_NON_POOLING
+  );
   useEffect(() => {
     const fetchPeople = async () => {
       try {
