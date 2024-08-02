@@ -1,7 +1,3 @@
-//create a get method that will take id from the context , search for the id from prisma
-//if found return the data record
-
-// import prisma from "@/app/lib/prisma.config";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

@@ -13,11 +13,9 @@ import { Person } from "../app/lib/person";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Box } from "@mui/material";
 
 //import my custom Footer that will go at the bottom of the page
 import Footer from "./components/CFooter";
-import { env } from "process";
 
 const HomePage: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -35,6 +33,7 @@ const HomePage: React.FC = () => {
     process.env.DATABASE_URL,
     process.env.POSTGRES_URL_NON_POOLING
   );
+
   useEffect(() => {
     const fetchPeople = async () => {
       try {

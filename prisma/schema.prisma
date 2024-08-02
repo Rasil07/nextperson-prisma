@@ -14,9 +14,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection which is required by Vercel Neon
-
+  url = "postgres://default:7VpRKLD1bFwa@ep-aged-heart-a75058dr-pooler.ap-southeast-2.aws.neon.tech:5432/verceldb?sslmode=require"
+  // url      = env("DATABASE_URL")
+  directUrl = "postgres://default:7VpRKLD1bFwa@ep-aged-heart-a75058dr.ap-southeast-2.aws.neon.tech:5432/verceldb?sslmode=require"
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection which is required by Vercel Neon
 }
 
 
