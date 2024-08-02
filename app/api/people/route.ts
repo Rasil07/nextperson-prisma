@@ -6,7 +6,9 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const people = await prisma.person.findMany();
+    const people = await prisma.person
+      .findMany()
+      .catch((err) => console.log("Error getting people pgclient", err));
 
     console.log("Get people", { people });
     return new Response(JSON.stringify(people), {
