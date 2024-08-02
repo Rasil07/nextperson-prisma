@@ -1,45 +1,41 @@
 //create a get method that will take id from the context , search for the id from prisma
 //if found return the data record
 
-import { PrismaClient } from '@prisma/client';
+// import prisma from "@/app/lib/prisma.config";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-
 
 export async function GET(request: Request, context: any) {
   const { id } = context.params;
 
-
   const person = await prisma.person.findUnique({
     where: {
       id: parseInt(id),
-    }
-  })
+    },
+  });
   if (!person) {
-    return new Response('Not found', {
+    return new Response("Not found", {
       status: 404,
-    })
+    });
   }
   return new Response(JSON.stringify(person), {
     status: 200,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-  })
-
-
+  });
 }
 
 export async function PUT(request: Request, context: any) {
   const { id } = context.params;
 
   try {
-
     const body = await request.json();
     const { firstname, lastname, phone } = body;
 
     if (!firstname || !lastname || !phone) {
-      return new Response('Missing required fields', {
+      return new Response("Missing required fields", {
         status: 400,
       });
     }
@@ -57,7 +53,7 @@ export async function PUT(request: Request, context: any) {
     });
 
     if (!updatedPerson) {
-      return new Response('Person not found', {
+      return new Response("Person not found", {
         status: 404,
       });
     }
@@ -65,11 +61,11 @@ export async function PUT(request: Request, context: any) {
     return new Response(JSON.stringify(updatedPerson), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
   } catch (error) {
-    return new Response('Error', {
+    return new Response("Error", {
       status: 500,
     });
   }
@@ -78,25 +74,24 @@ export async function DELETE(request: Request, context: any) {
   const { id } = context.params;
 
   try {
+    const deletedPerson = await prisma.person.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
 
-      const deletedPerson = await prisma.person.delete({
-          where: {
-              id: parseInt(id),
-          },
+    if (!deletedPerson) {
+      return new Response("Person not found", {
+        status: 404,
       });
+    }
 
-      if (!deletedPerson) {
-          return new Response('Person not found', {
-              status: 404,
-          });
-      }
-
-      return new Response('Person deleted successfully', {
-          status: 200,
-      });
+    return new Response("Person deleted successfully", {
+      status: 200,
+    });
   } catch (error) {
-      return new Response('Error', {
-          status: 500,
-      });
+    return new Response("Error", {
+      status: 500,
+    });
   }
 }
