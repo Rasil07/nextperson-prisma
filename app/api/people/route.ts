@@ -5,15 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const people = await prisma.person.findMany();
+  try {
+    const people = await prisma.person.findMany();
 
-  console.log("Get people", { people });
-  return new Response(JSON.stringify(people), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    console.log("Get people", { people });
+    return new Response(JSON.stringify(people), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (err) {
+    console.log("Error while fetching peoples", err);
+  }
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
