@@ -7,6 +7,7 @@ frontend:
     build:
       commands:
         - env | grep -e DATABASE_URL >> .env.production
+        - env | grep -e POSTGRES_URL_NON_POOLING >> .env.production
         - NODE_ENV=production npx next build
   artifacts:
     baseDirectory: .next
