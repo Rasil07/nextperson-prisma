@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   } catch (err) {
     console.log("Error while fetching peoples", err);
 
-    return new Response("Error", {
+    return new Response(JSON.stringify(err), {
       status: 500,
     });
   }
