@@ -23,7 +23,7 @@ interface PersonDialogProps {
   handleClose: () => void;
   currentPerson: Person | null;
   setCurrentPerson: React.Dispatch<React.SetStateAction<Person | null>>;
-  handleSubmit: () => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const PersonDialog: React.FC<PersonDialogProps> = ({
@@ -35,63 +35,74 @@ const PersonDialog: React.FC<PersonDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{currentPerson ? "Edit Person" : "Add Person"}</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="First Name"
-          fullWidth
-          value={currentPerson?.firstname || ""}
-          onChange={(e) =>
-            setCurrentPerson((prev) => ({
-              ...prev!,
-              firstname: e.target.value,
-            }))
-          }
-        />
-        <TextField
-          margin="dense"
-          label="Last Name"
-          fullWidth
-          value={currentPerson?.lastname || ""}
-          onChange={(e) =>
-            setCurrentPerson((prev) => ({ ...prev!, lastname: e.target.value }))
-          }
-        />
-        <TextField
-          margin="dense"
-          label="Phone"
-          fullWidth
-          value={currentPerson?.phone || ""}
-          onChange={(e) =>
-            setCurrentPerson((prev) => ({ ...prev!, phone: e.target.value }))
-          }
-        />
+      <form onSubmit={handleSubmit}>
+        <DialogTitle>
+          {currentPerson ? "Edit Person" : "Add Person"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="First Name"
+            name="firstname"
+            fullWidth
+            defaultValue={currentPerson?.firstname || ""}
+            // onChange={(e) =>
+            //   setCurrentPerson((prev) => ({
+            //     ...prev!,
+            //     firstname: e.target.value,
+            //   }))
+            // }
+          />
+          <TextField
+            margin="dense"
+            label="Last Name"
+            name="lastname"
+            fullWidth
+            defaultValue={currentPerson?.lastname || ""}
+            // onChange={(e) =>
+            //   setCurrentPerson((prev) => ({
+            //     ...prev!,
+            //     lastname: e.target.value,
+            //   }))
+            // }
+          />
+          <TextField
+            margin="dense"
+            label="Phone"
+            fullWidth
+            name="phone"
+            defaultValue={currentPerson?.phone || ""}
+            // onChange={(e) =>
+            //   setCurrentPerson((prev) => ({ ...prev!, phone: e.target.value }))
+            // }
+          />
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              label="Basic date picker"
-              defaultValue={dayjs(currentPerson?.dateOfBirth)}
-              onChange={(e) =>
-                setCurrentPerson((prev) => ({
-                  ...prev!,
-                  dateOfBirth: dayjs(e).format("YYYY-MM-DD"),
-                }))
-              }
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary">
-          {currentPerson ? "Update" : "Add"}
-        </Button>
-      </DialogActions>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker"]}>
+              <DatePicker
+                label="Basic date picker"
+                name="dateOfBirth"
+                defaultValue={dayjs(currentPerson?.dateOfBirth)}
+                // onChange={(e) =>
+                //   setCurrentPerson((prev) => ({
+                //     ...prev!,
+                //     dateOfBirth: dayjs(e).format("YYYY-MM-DD"),
+                //   }))
+                // }
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button color="primary" type="submit">
+            {currentPerson ? "Update" : "Add"}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

@@ -7,7 +7,12 @@ import Layout from "../app/layout";
 import PersonTable from "./components/PersonTable";
 import PersonDialog from "./components/PersonDialog";
 import SnackbarAlert from "./components/SnackbarAlert";
-import { Person } from "../app/lib/person";
+import {
+  createPerson,
+  Person,
+  updatePerson,
+  deletePerson,
+} from "../app/lib/person";
 
 //these are required for the AppBar
 import AppBar from "@mui/material/AppBar";
@@ -59,11 +64,9 @@ const HomePage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      const response = await fetch(`/api/people/${id}`, {
-        method: "DELETE",
-      });
+      const response = await deletePerson(String(id));
 
-      if (response.ok) {
+      if (response) {
         setPeople((prevPeople) =>
           prevPeople.filter((person) => person.id !== id)
         );
@@ -81,40 +84,25 @@ const HomePage: React.FC = () => {
     setSnackbarOpen(true);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
-      let response;
+      const formData = new FormData(event.currentTarget);
       if (editMode && currentPerson) {
-        response = await fetch(`/api/people/${currentPerson.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(currentPerson),
-        });
+        formData.append("id", currentPerson.id.toString());
+        const updatedPerson = await updatePerson(formData);
+        setPeople((prevPeople) =>
+          prevPeople.map((person) =>
+            person.id === updatedPerson.id ? updatedPerson : person
+          )
+        );
       } else {
-        response = await fetch("/api/people", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(currentPerson),
-        });
+        const newPerson = await createPerson(formData);
+        setPeople((prevPeople) => [...prevPeople, newPerson]);
       }
 
-      if (response.ok) {
-        const updatedPerson: Person = await response.json();
-        if (editMode) {
-          setPeople((prevPeople) =>
-            prevPeople.map((person) =>
-              person.id === updatedPerson.id ? updatedPerson : person
-            )
-          );
-        } else {
-          setPeople((prevPeople) => [...prevPeople, updatedPerson]);
-        }
-        setSnackbarMessage("Record saved successfully!");
-        setSnackbarSeverity("success");
-      } else {
-        setSnackbarMessage("Error saving the record.");
-        setSnackbarSeverity("error");
-      }
+      setSnackbarMessage("Record saved successfully!");
+      setSnackbarSeverity("success");
     } catch (error) {
       console.error("Error saving the person:", error);
       setSnackbarMessage("Error saving the record.");
