@@ -28,7 +28,7 @@ export async function PUT(request: Request, context: any) {
 
   try {
     const body = await request.json();
-    const { firstname, lastname, phone } = body;
+    const { firstname, lastname, phone, dateOfBirth } = body;
 
     if (!firstname || !lastname || !phone) {
       return new Response("Missing required fields", {
@@ -44,6 +44,7 @@ export async function PUT(request: Request, context: any) {
         firstname,
         lastname,
         phone,
+        dateOfBirth,
         // You can add other fields to update here
       },
     });

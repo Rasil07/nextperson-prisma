@@ -9,8 +9,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const people = await prisma.person
       .findMany()
       .catch((err) => console.log("Error getting people pgclient", err));
-
-    console.log("Get people", { people });
+    console.log({ people });
     return new Response(JSON.stringify(people), {
       status: 200,
       headers: {
@@ -18,8 +17,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       },
     });
   } catch (err) {
-    console.log("Error while fetching peoples", err);
-
     return new Response(JSON.stringify(err), {
       status: 500,
     });
@@ -29,7 +26,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const body = await req.json();
-    const { firstname, lastname, phone } = body;
+    const { firstname, lastname, phone, dateOfBirth } = body;
     if (!firstname || !lastname || !phone) {
       return new Response("Missing required fields", {
         status: 400,
@@ -41,6 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         firstname,
         lastname,
         phone,
+        dateOfBirth,
       },
     });
 
@@ -49,6 +47,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       status: 202,
     });
   } catch (error) {
+    console.log("Error on creating new person", error);
     return new Response("Error", {
       status: 500,
     });

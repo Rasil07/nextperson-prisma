@@ -28,12 +28,6 @@ const HomePage: React.FC = () => {
     "success"
   );
 
-  console.log(
-    "Env variables",
-    process.env.DATABASE_URL,
-    process.env.POSTGRES_URL_NON_POOLING
-  );
-
   useEffect(() => {
     const fetchPeople = async () => {
       try {

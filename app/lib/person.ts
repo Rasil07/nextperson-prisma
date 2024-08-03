@@ -1,6 +1,7 @@
 export interface Person {
-    id: number;
-    firstname: string;
-    lastname: string;
-    phone: string;
+  id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  dateOfBirth?: string;
 }
